@@ -1,0 +1,7 @@
+- name: prometheus playbook
+  hosts: prometheus
+  remote_user: sasa
+  become: true
+
+  roles:
+    - prometheus

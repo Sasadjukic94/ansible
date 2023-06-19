@@ -1,0 +1,62 @@
+- name: Create node-exporter group
+  ansible.builtin.group:
+    name: node-exporter
+    state: present
+    system: true
+  tags:
+    - node-exporter-group
+
+- name: Create node-exporter user
+  ansible.builtin.user:
+    name: node-exporter
+    group: node-exporter
+    state: present
+    system: true
+  tags:
+    - node-exporter-user
+
+- name: Create node-exporter directory
+  ansible.builtin.file:
+    path: /opt/node-exporter
+    owner: node-exporter
+    group: node-exporter
+    state: directory
+  tags:
+    - node-exporter-install
+    - node-exporter-directory
+
+- name: Download node-exporter
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus/node_exporter/releases/download/v1.5.0/node_exporter-1.5.0.linux-amd64.tar.gz
+    dest: /opt/node-exporter
+  tags:
+    - node-exporter-install
+
+- name: Unarchive a node-exporter
+  ansible.builtin.unarchive:
+    src: /opt/node-exporter/node_exporter-1.5.0.linux-amd64.tar.gz
+    dest: /opt/node-exporter
+    remote_src: yes
+  tags:
+    - node-exporter-install
+
+- name: Copy systemd service file to server
+  ansible.builtin.copy:
+    src: node_exporter.service
+    dest: /etc/systemd/system
+    owner: node-exporter
+    group: node-exporter
+  notify: restart-node-exporter
+  tags:
+    - node-exporter-install
+    - node-exporter-configure
+
+- name: Enable and restart node exporter service
+  ansible.builtin.systemd:
+    name: node_exporter
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  tags:
+    - node-exporter-restart
+    - node-exporter-install

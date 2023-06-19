@@ -1,0 +1,62 @@
+- name: Create grafana group
+  ansible.builtin.group:
+    name: grafana
+    state: present
+    system: true
+  tags:
+    - grafana-group
+
+- name: Create grafana user
+  ansible.builtin.user:
+    name: grafana
+    group: grafana
+    state: present
+    system: true
+  tags:
+    - grafana-user
+
+- name: Create grafana directory
+  ansible.builtin.file:
+    path: /opt/grafana
+    owner: grafana
+    group: grafana
+    state: directory
+  tags:
+    - grafana-install
+    - grafana-directory
+
+- name: Download grafana
+  ansible.builtin.get_url:
+    url: https://dl.grafana.com/enterprise/release/grafana-enterprise-9.3.0-beta1.linux-amd64.tar.gz
+    dest: /opt/grafana
+  tags:
+    - grafana-install
+
+- name: Unarchive a grafana
+  ansible.builtin.unarchive:
+    src: /opt/grafana/grafana-enterprise-9.3.0-beta1.linux-amd64.tar.gz
+    dest: /opt/grafana
+    remote_src: yes
+  tags:
+    - grafana-install
+
+- name: Copy systemd service file to server
+  ansible.builtin.copy:
+    src: grafana-server.service
+    dest: /etc/systemd/system
+    owner: grafana
+    group: grafana
+  #notify: restart-grafana
+  tags:
+    - grafana-install
+    - grafana-configure
+
+- name: Enable and restart grafana service
+  ansible.builtin.systemd:
+    name: grafana-server
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  tags:
+    - grafana-restart
+    - grafana-install

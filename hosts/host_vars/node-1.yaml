@@ -1,0 +1,12 @@
+# folders_to_create:
+#   - /opt/node1
+#   - /opt/test2
+
+# host_name: "node-1"
+# ip_address: "192.168.1.61"
+# description: "server 1"
+
+# apto_to_install:
+#   - node1
+#   - node2
+

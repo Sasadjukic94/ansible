@@ -1,0 +1,26 @@
+folders_to_create:
+  - /var/www/app1
+  - /var/www/app2
+  - /var/www/app3
+
+html_files:
+  - { name: "index.html", dir: "app1" }
+  - { name: "index.html", dir: "app2" }
+  - { name: "index.html", dir: "app3" }
+
+apps:
+  - app1
+  - app2
+  - app3
+
+  #files_to_create:
+  #- /var/www/app1/index.html
+  #- /var/www/app2/index.html
+  #- /var/www/app3/index.html
+# host_name: "node-3"
+# ip_address: "192.168.1.65"
+# description: "server 1"
+#packages:
+# - net-tools
+#- nginx
+#- htop

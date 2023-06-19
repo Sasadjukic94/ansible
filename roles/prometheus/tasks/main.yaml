@@ -1,0 +1,73 @@
+- name: Create prometheus group
+  ansible.builtin.group:
+    name: prometheus
+    state: present
+    system: true
+  tags:
+    - prometeus-group
+
+- name: Create prometheus user
+  ansible.builtin.user:
+    name: prometheus
+    group: prometheus
+    state: present
+    system: true
+  tags:
+    - prometheus-user
+
+- name: Create prometheus directory
+  ansible.builtin.file:
+    path: /opt/prometheus
+    owner: prometheus
+    group: prometheus
+    state: directory
+  tags:
+    - prometheus-install
+    - prometheus-directory
+
+- name: Download prometheus
+  ansible.builtin.get_url:
+    url: https://github.com/prometheus/prometheus/releases/download/v2.43.0/prometheus-2.43.0.linux-amd64.tar.gz
+    dest: /opt/prometheus
+  tags:
+    - prometheus-install
+
+- name: Unarchive a prometheus
+  ansible.builtin.unarchive:
+    src: /opt/prometheus/prometheus-2.43.0.linux-amd64.tar.gz
+    dest: /opt/prometheus
+    remote_src: yes
+  tags:
+    - prometheus-install
+
+# - name: Copy systemd service file to server
+#   ansible.builtin.copy:
+#     src: prometheus.service
+#     dest: /etc/systemd/system
+#     owner: prometheus
+#     group: prometheus
+#   notify: restart-prometheus
+#   tags:
+#     - prometheus-install
+#     - prometheus-configure
+
+- name: Copy systemd service file to server
+  ansible.builtin.template:
+    src: prometheus.service.j2
+    dest: /etc/systemd/system/prometheus.service
+    owner: prometheus
+    group: prometheus
+  notify: restart-prometheus
+  tags:
+    - prometheus-install
+    - prometheus-configure
+
+- name: Enable and restart prometheus service
+  ansible.builtin.systemd:
+    name: prometheus
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  tags:
+    - prometheus-restart
+    - prometheus-install

@@ -1,0 +1,28 @@
+# - name: Create test1 directory
+#   ansible.builtin.file:
+#     path: "{{ item }}"
+#     owner: root
+#     group: root
+#     state: directory
+#   loop: "{{ folders_to_create_host }}"
+
+- name: Install the latest version of htop, net-tools and nginx
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ packages }}"
+- name: Write hosts names
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/home/sasa/{{ item }}"
+  loop:
+    - mounts
+    # - host-name
+    # - ip-address
+# - name: Install packages
+#   apt:
+#     name: "{{ item }}"
+#   loop:
+#     - htop
+#     - mc
+#     - tmux

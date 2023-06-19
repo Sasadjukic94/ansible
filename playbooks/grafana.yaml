@@ -1,0 +1,7 @@
+- name: grafana playbook
+  hosts: grafana
+  remote_user: sasa
+  become: true
+
+  roles:
+    - grafana

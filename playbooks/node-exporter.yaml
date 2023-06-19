@@ -1,0 +1,8 @@
+---
+- name: Node-exporter playbook
+  hosts: all
+  remote_user: sasa
+  become: true
+
+  roles:
+    - node-exporter

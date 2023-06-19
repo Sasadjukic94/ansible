@@ -1,0 +1,7 @@
+- name: nginx playbook
+  hosts: nginx
+  remote_user: sasa3
+  become: true
+
+  roles:
+    - nginx

@@ -1,0 +1,7 @@
+- name: Test playbook
+  hosts: all
+  remote_user: sasa
+  become: true
+
+  roles:
+    - test

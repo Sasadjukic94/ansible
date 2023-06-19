@@ -1,0 +1,6 @@
+prometheus_data: "/var/lib/prometheus"
+# disk_mounts:
+#   - name: "disk1"
+#     path: "/opt/data"
+
+#   - { name: "disk2", path: "/opt/data2" }
