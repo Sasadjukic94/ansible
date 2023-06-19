@@ -13,7 +13,13 @@ apps:
   - app2
   - app3
 
-  #files_to_create:
+app_nginx_configurations:
+  - { domain: "app1.com", folder: "/var/www/app1" }
+  - { domain: "app2.com", folder: "/var/www/app2" }
+  - { domain: "app3.com", folder: "/var/www/app2" }
+
+# /etc/nginx/conf.d/app1.com.conf
+
   #- /var/www/app1/index.html
   #- /var/www/app2/index.html
   #- /var/www/app3/index.html

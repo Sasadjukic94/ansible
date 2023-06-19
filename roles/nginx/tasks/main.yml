@@ -10,38 +10,45 @@
     state: absent
   notify: restart-nginx
 
-- name: create directory if they don't exist
+- name: Create directory if they don't exist
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: "{{ item.folder }}"
     state: directory
     owner: root
     group: root
-  loop: "{{ folders_to_create }}"
+  loop: "{{ app_nginx_configurations }}"
 
-- name: Copy systemd service file to server
-  ansible.builtin.copy:
-    src: nginx.conf
-    dest: /etc/nginx/conf.d/test.conf
-    owner: root
-    group: root
-  notify: restart-nginx
+#- name: Copy nginx site configurations
+#  ansible.builtin.copy:
+#    src: nginx.conf
+#    dest: /etc/nginx/conf.d/test.conf
+#    owner: root
+#    group: root
+#  notify: restart-nginx
 
 - name: Create index.html conf
   ansible.builtin.copy:
-    src: "{{ item.name }}"
-    dest: "/var/www/{{ item.dir }}/{{ item.name }}"
+    src: "{{ item.app }}/index.html"
+    dest: "{{ item.folder }}/index.html"
     owner: root
     group: root
-  loop: "{{ html_files }}"
+  loop: "{{ app_nginx_configurations }}"
+
+- name: Copy site configurations
+  ansible.builtin.template:
+    src: "app-nginx-template.conf.j2"
+    dest: "/etc/nginx/conf.d/{{ item.domain }}.conf"
+  notify: restart-nginx
+  loop: "{{ app_nginx_configurations }}"
 
 # ------ Task that copies file from local files/ folder  to remote host with content   -----------
-- name: Copy site configurations
-  ansible.builtin.copy:
-    src: "{{ item }}/index.html"
-    dest: "/var/www/{{ item }}/index.html"
-    owner: root
-    group: root
-  loop: "{{ apps }}"
+#- name: Copy site configurations
+#  ansible.builtin.copy:
+#    src: "{{ item }}/index.html"
+#    dest: "/var/www/{{ item }}/index.html"
+#    owner: root
+#    group: root
+#  loop: "{{ apps }}"
 # Zadatak:
 # ansibletest.com/service1 -> /opt/service1/index.html
 # ansibletest.com/applicatio1 -> /opt/aplication1/index.html

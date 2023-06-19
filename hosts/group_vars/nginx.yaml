@@ -1,0 +1,20 @@
+#html_files:
+#  - { name: "index.html", dir: "app1" }
+#  - { name: "index.html", dir: "app2" }
+#  - { name: "index.html", dir: "app3" }
+
+#apps:
+#  - app1
+#  - app2
+#  - app3
+
+#folders_to_create:
+#  - /var/www/app1
+#  - /var/www/app2
+#  - /var/www/app3
+
+app_nginx_configurations:
+  - { domain: "app1.com", folder: "/var/www/app1", app: "app1" }
+  - { domain: "app2.com", folder: "/var/www/app2", app: "app2" }
+  - { domain: "app3.com", folder: "/var/www/app3", app: "app3" }
+  - { domain: "app4.com", folder: "/var/www/app4", app: "app4" }
