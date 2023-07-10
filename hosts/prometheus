@@ -1,2 +1,2 @@
 [prometheus]
-#node-3 ansible_ssh_host=192.168.1.65
+node-1 ansible_ssh_host=192.168.1.19

@@ -3,10 +3,10 @@ Description=Node Exporter
 After=network.target
 
 [Service]
-User=node_exporter
-Group=node_exporter
+User=node-exporter
+Group=node-exporter
 Type=simple
-ExecStart=/usr/local/bin/node_exporter 
+ExecStart=/opt/node-exporter/node_exporter-1.5.0.linux-amd64/node_exporter
 
 [Install]
-WantedBy=multi-user.target
+

@@ -1,6 +1,5 @@
----
 - name: Node-exporter playbook
-  hosts: all
+  hosts: node-exporter
   remote_user: sasa
   become: true
 

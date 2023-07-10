@@ -3,12 +3,16 @@
     update_cache: yes
     name: nginx
     # state: present
+  tags:
+    - nginix-install
 
 - name: Remove nginix default conf
   ansible.builtin.file:
     path: /etc/nginx/sites-enabled/default
     state: absent
   notify: restart-nginx
+  tags:
+    - nginix-install
 
 - name: Create directory if they don't exist
   ansible.builtin.file:
@@ -40,7 +44,6 @@
     dest: "/etc/nginx/conf.d/{{ item.domain }}.conf"
   notify: restart-nginx
   loop: "{{ app_nginx_configurations }}"
-
 # ------ Task that copies file from local files/ folder  to remote host with content   -----------
 #- name: Copy site configurations
 #  ansible.builtin.copy:

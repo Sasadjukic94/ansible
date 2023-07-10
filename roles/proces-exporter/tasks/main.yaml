@@ -1,0 +1,77 @@
+- name: Create proces-exporter group
+  ansible.builtin.group:
+    name: process-exporter
+    state: present
+    system: true
+  tags:
+    - proces-exporter-group
+
+- name: Create proces-exporter user
+  ansible.builtin.user:
+    name: process-exporter
+    group: process-exporter
+    state: present
+    system: true
+  tags:
+    - proces-exporter-user
+
+- name: Create proces-exporter directory
+  ansible.builtin.file:
+    path: /opt/process-exporter
+    owner: process-exporter
+    group: process-exporter
+    state: directory
+  tags:
+    - proces-exporter-install
+    - proces-exporter-directory
+
+- name: Create proces-exporter directory
+  ansible.builtin.file:
+    path: /etc/process-exporter
+    owner: process-exporter
+    group: process-exporter
+    state: directory
+  tags:
+    - proces-exporter-install
+    - proces-exporter-directory
+
+- name: Unarchive a proces-exporter
+  ansible.builtin.unarchive:
+    src: https://github.com/ncabatoff/process-exporter/releases/download/v0.6.0/process-exporter-0.6.0.linux-amd64.tar.gz
+    dest: /usr/local/bin/
+    remote_src: yes
+  tags:
+    - proces-exporter-install
+
+- name: Copy systemd service file to server
+  ansible.builtin.copy:
+    src: process-exporter.service
+    dest: /etc/systemd/system/process-exporter.service
+    owner: process-exporter
+    group: process-exporter
+  notify: restart-process-exporter
+  tags:
+    - proces-exporter-install
+    - proces-exporter-configure
+
+- name: Copy systemd service file to server
+  ansible.builtin.copy:
+    src: process-exporter.yml
+    dest: /etc/process-exporter/process-exporter.yml
+    mode: 0755
+    owner: process-exporter
+    group: process-exporter
+  notify: restart-process-exporter
+  tags:
+    - prometheus-install
+    - prometheus-configure
+
+- name: Enable and restart proces exporter service
+  ansible.builtin.systemd:
+    name: process-exporter
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  tags:
+    - proces-exporter-restart
+    - proces-exporter-install

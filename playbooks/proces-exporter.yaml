@@ -1,0 +1,7 @@
+- name: proces-exporter playbook
+  hosts: proces-exporter
+  remote_user: sasa
+  become: true
+
+  roles:
+    - proces-exporter
