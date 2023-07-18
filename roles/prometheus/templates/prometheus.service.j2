@@ -15,6 +15,6 @@ scrape_configs:
     static_configs:
       - targets:
 {% for server in groups[prometheus_proces_exporter_group] %}
-        - {{ server }}:9100
+        - {{ server }}:9256
 {% endfor %}
 {% endif %}
